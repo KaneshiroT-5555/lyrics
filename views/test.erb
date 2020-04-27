@@ -1,0 +1,93 @@
+<head>
+<link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <meta charset="utf-8">
+    <title>Processing Demo</title>
+    <link href="https://fonts.googleapis.com/earlyaccess/sawarabimincho.css" rel="stylesheet" />
+    <%# <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script> %>
+   <%# <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script> %>
+  <%# <script type="text/javascript" src="https://raw.githubusercontent.com/lmccart/p5.js/master/lib/addons/p5.dom.js"></script> %>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/addons/p5.sound.min.js"></script>
+
+
+<style type="text/css">
+    .test{
+        color:rgba(0,0,0,0.4);
+        opacity:0.8;}
+    #defaultCanvas0{
+    position: fixed; /*canvasを固定*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top:0; /*canvasを上に固定*/
+    display:block; /* remove scrollbars */
+        position: absolute;  /* position at top left corner for overlay */
+        z-index:0;}
+</style>
+
+</head>
+
+
+<body>
+<h1>Lyrics search</h1>
+</body>
+
+
+
+
+
+ <script type="text/javascript">
+// P5js
+
+let mic;
+function setup(){
+  createCanvas(windowWidth, windowHeight);
+  
+  mic = new p5.AudioIn();
+  mic.start();
+  fft = new p5.FFT();
+  fft.setInput(mic);
+  colorMode(HSB, 360);
+  //strokeWeight(5);
+}
+function draw(){
+  background(0);
+  micLevel = mic.getLevel();
+  ellipse(width/2, constrain(height-micLevel*height*5, 0, height), 10, 10);
+
+  var spectrum = fft.analyze();
+  var circRad = 300;
+  var circThick = 25;
+  var maxSpectrum = 128; //spectrum.length
+  
+  for(i = 0; i < maxSpectrum; i+=1) {
+    var circi = map(i, 0, maxSpectrum, 0, 360);
+    var dist = spectrum[i]; //map(spectrum[i/2], 0, 255, 0, 360);
+    stroke(spectrum[i], 360, 360);
+    line(width/2 - CircleX(circi, circRad+dist+circThick), height/2 + CircleY(circi, circRad+dist+circThick), width/2 - CircleX(circi, circRad-dist-circThick), height/2 + CircleY(circi, circRad-dist-circThick));
+  }  
+}
+
+function CircleX(degrees, radius) {
+	return sin(radians(degrees))*radius;
+}
+ 
+function CircleY(degrees, radius) {
+	return cos(radians(degrees))*radius;
+}
+
+ </script>
+
+<%# <script src="js/p5.sound.js"></script> %>
+
+
+
+
+

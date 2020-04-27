@@ -1,0 +1,165 @@
+<%# <script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script> %>
+<link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+
+    <meta charset="utf-8">
+    <title>home</title>
+    <link href="https://fonts.googleapis.com/earlyaccess/sawarabimincho.css" rel="stylesheet" />
+    <script type="text/javascript" 
+              src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js">
+   </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script>
+   <script type="text/javascript" src="https://raw.githubusercontent.com/lmccart/p5.js/master/lib/addons/p5.dom.js">
+   </script>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+
+    <style type="text/css">
+    .test{
+        color:rgba(0,0,0,0.4);
+        opacity:0.8;}
+    #defaultCanvas0{
+    position: fixed; /*canvasを固定*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto; /*canvasを上に固定*/
+    display:block; /* remove scrollbars */
+        position: absolute;  /* position at top left corner for overlay */
+        z-index: -10;}
+    </style>
+
+
+
+<body>
+<div class="home">
+<div class="content">
+
+    <form action="/word" method="POST">
+
+        <div class="main1">
+            <input class="input" type="text" align="center" placeholder="Username" name="name" id="name" >
+            <input class="input" type="password" align="center" placeholder="Password" name="pass" id="content">
+            <input class="submit" align="center" type="submit" value="Login">
+        </div>
+        <p class="button" align="center">Sign in</p>
+    </form> 
+</div>
+
+<div class="content" align="center">
+
+    <form action="/word" method="POST">
+        <input class="input" type="text" align="center" placeholder="Pleas favorite WORD" name="word" id="word">
+        <input class="submit" align="center" type="submit" value="Lyrics">
+        <p class="button">word search</p>
+    </form> 
+</div>
+
+<a href="/new_user">New user</a>
+</div>
+</body>
+
+
+
+<script type="text/javascript">
+$(function () {
+    $('.button').prevAll().hide();
+    $('.button').click(function () {
+        if ($(this).prevAll().is(':hidden')) {
+            $(this).prevAll().slideDown();
+            // $(this).text('閉じる').addClass('close');
+        } else {
+            $(this).prevAll().slideUp();
+            // $(this).text('もっと見る').removeClass('close');
+        }
+    });
+});
+
+
+// P5js
+
+var mass = [];
+var positionX = [];
+var positionY = [];
+var velocityX = [];
+var velocityY = [];
+var fr=20;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function setup() {
+    frameRate(fr);
+    createCanvas(windowWidth, windowHeight);
+    noStroke();
+    fill(100, 100, 200, 200);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function draw() {
+    background(0,0,0,50);
+
+    for (var particleA = 0; particleA < mass.length; particleA++) {
+        var accelerationX = 0,
+            accelerationY = 0;
+
+        for (var particleB = 0; particleB < mass.length; particleB++) {
+            if (particleA != particleB) {
+                var distanceX = positionX[particleB] - positionX[particleA];
+                var distanceY = positionY[particleB] - positionY[particleA];
+
+                var distance = sqrt(distanceX * distanceX + distanceY * distanceY);
+                if (distance < 1) distance = 1;
+
+                var force = (distance - 320) * mass[particleB] / distance;
+                accelerationX += force * distanceX;
+                accelerationY += force * distanceY;
+            }
+        }
+
+        velocityX[particleA] = velocityX[particleA] * 0.99 + accelerationX * mass[particleA];
+        velocityY[particleA] = velocityY[particleA] * 0.99 + accelerationY * mass[particleA];
+    }
+
+    for (var particle = 0; particle < mass.length; particle++) {
+        positionX[particle] += velocityX[particle];
+        positionY[particle] += velocityY[particle];
+
+        ellipse(positionX[particle], positionY[particle], mass[particle] * 200, mass[particle] * 200);
+
+        stroke(60, 60, 200, 50);
+        line(positionX[particle], positionY[particle],positionX[particle-1],positionY[particle-1]);
+
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function addNewParticle() {
+    mass.push(random(0.003, 0.03));
+    positionX.push(mouseX);
+    positionY.push(mouseY);
+    velocityX.push(0);
+    velocityY.push(0);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function mouseClicked() {
+    addNewParticle();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function mouseDragged() {
+    addNewParticle();
+}
+
+
+
+
+</script>

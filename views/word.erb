@@ -1,0 +1,373 @@
+
+
+
+<!DOCTYPE html>
+<html>
+
+
+<head>
+<link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://fonts.googleapis.com/earlyaccess/sawarabimincho.css" rel="stylesheet" />
+
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/addons/p5.sound.min.js"></script>
+
+
+
+
+<style type="text/css">
+    .test{
+        color:rgba(0,0,0,0.4);
+        opacity:0.8;}
+    #defaultCanvas0{
+    position: fixed; /*canvasを固定*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top:0; /*canvasを上に固定*/
+    display:block; /* remove scrollbars */
+        position: absolute;  /* position at top left corner for overlay */
+        z-index: -10;}
+</style>
+
+</head>
+
+<body>
+
+
+<h1>Lyrics search</h1>
+
+
+
+<div class="box">
+    <div class="example">
+        <% writers = @words %>
+        <% writers.each do |word| %>
+            <div class="ly">
+                <a id="target" href='/music/<%=word['music_id'] %> 'target="_blank">
+                <%= word['word'] %>
+                <br><br>
+                </a>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+
+
+<div class="content" align="center">
+
+    <form action="/word" method="POST">
+        <input class="input" type="text" align="center" placeholder="Pleas favorite WORD" name="word" id="word">
+        <input class="submit" align="center" type="submit" value="Lyrics">
+        <p class="button">word search</p>
+    </form> 
+</div>
+</body>
+
+
+
+
+<%# P5js %>
+
+ <script type="text/javascript">
+        $(function () {
+            $('.button').prevAll().hide();
+            $('.button').click(function () {
+                if ($(this).prevAll().is(':hidden')) {
+                    $(this).prevAll().slideDown();
+                    // $(this).text('閉じる').addClass('close');
+                } else {
+                    $(this).prevAll().slideUp();
+                    // $(this).text('もっと見る').removeClass('close');
+                }
+            });
+        });
+
+        $(document).ready(function(){
+
+                $('.ly').hover(function() {
+
+                $(this).stop().animate({'font-size':'40px'}, 900);
+
+                },function() {
+
+                $(this).stop().animate({'font-size':'20px'}, 900);
+
+                addNewParticle_new();
+
+                });
+
+        });
+
+        
+
+
+
+
+
+// >>>>>>>>>>>>>p5js-old
+
+        var GetText="<%= @words[0]['word'] %>";
+        var TsizG=40;
+        var Tsiz=30;
+        var json_words;
+        var greet_on="false";
+
+        var length;
+        var input, button, greeting,name;
+        var fr=20;
+
+        var word= "<%= @word %>";
+
+
+
+        //>>>>>>>>>>>P5js_new
+        var mass = [];
+        var positionX = [];
+        var positionY = [];
+        var velocityX = [];
+        var velocityY = [];
+        var fr=20;
+        var word2=[];
+        var i=0;
+        var word_out;
+        //>>>>>>>>>>>>>>
+
+        $(function(){
+            $.ajax({ // json読み込み開始
+            type: 'GET',
+            url: '/getword/'+ word,
+            dataType: 'json'
+            }).then(
+            function(json) { // jsonの読み込みに成功した時
+            console.log('成功fast');
+            json_words=json;
+            length=json.length;
+            greet_on="true";
+            },
+            function() { //jsonの読み込みに失敗した時
+            console.log('失敗');
+            }
+            ); 
+        });
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            frameRate(fr);
+            y = 0.4;
+            a = 0, a_1 = 0, a_2 = 0, a_3 = 0, a_4 = 0, a_5 = 0, a_t = 0;
+            Rein = 700;
+            x_t = random(10, 390);
+        
+            
+            textFont("Sawarabi Mincho");
+
+
+            // input = createInput();
+            // input.position(20, 65);
+
+            // button = createButton('submit');
+            // button.position(input.x + input.width, 65);
+            // button.mousePressed(greet);
+
+
+            ///////////////////////////////////
+            noStroke();
+            fill(200, 200, 200, 200);
+            i=0;
+            //////////////////////////////////
+
+        }
+
+        function draw() {
+            background(0,0,0,100);
+
+            // if (greet_on=="true"){
+            //     greet_on="false";
+            //     for (var i=0; i<length; i++) {
+            //     button = createButton(json_words[i]["word"],json_words[i]["music_id"]);
+            //     button.position(random(width/1.2),random(height));
+            //     button.mousePressed(post_music_id);
+            //     button.style("font-size",random(10,40)+"pt");
+            //     button.style("background-color", "rgba(250,250,250,0.0)");
+            //     button.style("outline", "0");
+            //     button.style("border","0");
+            //     button.style("font-family","Sawarabi Mincho");
+            //     button.style("color","rgba(0,0,0,0.8)");
+            //     }
+            // greet_on="false";
+            // }
+
+            // if (a_1 > 800) {
+            //     a_1 = -100;
+            // }
+            // if (a_2 > 800) {
+            //     a_2 = -100;
+            // }
+            // if (a_3 > 800) {
+            //     a_3 = -100;
+            // }
+            // if (a_4 > 800) {
+            //     a_4 = -100;
+            // }
+            // if (a_5 > 800) {
+            //     a_5 = -100;
+            // }
+            // if (a_t > 800) {
+            //     a_t = 0;
+            //     x_t = random(10, 390);
+            //     Tsiz = random(10, 400);
+            //     // TsizG=Tsiz;
+            // }
+            // a_1 += 2.8 * y;
+            // a_2 += 1.8 * y;
+            // a_3 += 2.1 * y;
+            // a_4 += 2.6 * y;
+            // a_5 += 1.5 * y;
+            // a_t += 1.0 * y;
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>p5js.new
+
+            for (var particleA = 0; particleA < mass.length; particleA++) {
+                var accelerationX = 0,
+                    accelerationY = 0;
+
+                for (var particleB = 0; particleB < mass.length; particleB++) {
+                    if (particleA != particleB) {
+                        var distanceX = positionX[particleB] - positionX[particleA];
+                        var distanceY = positionY[particleB] - positionY[particleA];
+
+                        var distance = sqrt(distanceX * distanceX + distanceY * distanceY);
+                        if (distance < 1) distance = 1;
+
+                        var force = (distance - 520) * mass[particleB] / distance;
+                        accelerationX += force * distanceX;
+                        accelerationY += force * distanceY;
+                    }
+                }
+
+                velocityX[particleA] = velocityX[particleA] * 0.99 + accelerationX * mass[particleA];
+                velocityY[particleA] = velocityY[particleA] * 0.99 + accelerationY * mass[particleA];
+            }
+
+            for (var particle = 0; particle < mass.length; particle++) {
+                positionX[particle] += velocityX[particle];
+                positionY[particle] += velocityY[particle];
+
+                ellipse(positionX[particle], positionY[particle], mass[particle] * 300, mass[particle] * 300);
+                textSize(13);
+                stroke(200, 200, 200, 100);
+                text(word2[particle],positionX[particle], positionY[particle]);
+
+                if(particle < length){
+                    word_out=json_words[particle]["word"];
+                }else{word_out="1111";}
+
+                text("__"+word_out,positionX[particle], positionY[particle]);
+                stroke(100, 100, 250, 200);
+                line(positionX[particle], positionY[particle],positionX[particle-1],positionY[particle-1]);
+                line(positionX[particle], positionY[particle],positionX[particle-2],positionY[particle-2]);
+                }
+        
+
+                    
+        }
+
+
+
+        function greet() {
+            word = input.value();
+            input.value('');
+            console.log("word:"+word);
+            greet_on++;
+
+            $.ajax({ // json読み込み開始
+                type: 'GET',
+                url: '/getword/'+ word,
+                dataType: 'json'
+                }).then(
+                function(json) { // jsonの読み込みに成功した時
+                console.log('成功'+ word);
+                console.log("この結果はlengthを使った結果です。=> "+json.length);
+                //JQueryのsize関数を使ってみる
+                console.log("この結果はsize()を使った結果です。=> "+$(json).size());
+                //JSONのサイズを表示する
+                json_words=json;
+                length=json.length;
+                console.log(json_words);
+                greet_on="true";
+                },
+                function() { //jsonの読み込みに失敗した時
+                console.log('失敗'+ word);
+                }
+                ); 
+
+            console.log("word:"+word);
+            console.log(json_words);
+        }
+
+        function post_music_id() {
+            console.log('music_idがクリックされました！');
+            console.log(button.value());
+            window.location.href = '/music/'+button.value();
+        }
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function addNewParticle() {
+    mass.push(random(0.003, 0.03));
+    positionX.push(mouseX);
+    positionY.push(mouseY);
+    velocityX.push(0);
+    velocityY.push(0);
+    word2.push(0+i);
+    i++;
+}
+
+function addNewParticle_new() {
+
+    if(i<length){
+    mass.push(random(0.003, 0.03));
+    positionX.push(random(0,windowWidth));
+    positionY.push(random(0, windowHeight));
+    velocityX.push(0);
+    velocityY.push(0);
+    word2.push(0+i);
+    i++;}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function mouseClicked() {
+    addNewParticle_new();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function mouseDragged() {
+    addNewParticle();
+}
+</script>
+
+
+
+
+
+</body>
+
+</html>

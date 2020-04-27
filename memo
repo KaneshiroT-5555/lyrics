@@ -1,0 +1,44 @@
+$.when(
+
+$.getJSON("test.json", function(jsonData) {
+    alert(jsonData);
+});
+
+
+).done(
+
+
+
+//読み込み後に実行される
+
+
+
+);
+
+
+ <h1>music<%=@musics[0]['name']%>!</h1>
+ <h1> <%=@musics[0]['artist']%>!</h1>
+  <h1> <%=@musics[0]['url']%>!</h1>
+ <h1>word <%=@words[0]['word']%>!</h1>
+ <h1><%=@words[0]['user_id']%>!</h1>
+ <h1>lyrics<%=@lyrics[0]['lyrics']%>!</h1>
+
+
+
+ <iframe src="https://open.spotify.com/embed/track/4hWI3r78IDOhPXSHd2f0Az" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+
+<iframe src="https://open.spotify.com/embed/track/0gPRMtNpYkURlnoL74zwpe" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<iframe src="https://open.spotify.com/embed/track/0gPRMtNpYkURlnoL74zwpe" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<iframe src="https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+
+
+<iframe src="https://open.spotify.com/embed/track/6K8qKeWo5MsFED7wCR6Kop" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+It’s late in the evening
+充たしたいのよ 五臓六腑まで
+
+沁みわたつてよ

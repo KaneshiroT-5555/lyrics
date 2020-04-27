@@ -1,0 +1,127 @@
+<script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script>
+
+<form action="/post" method="POST">
+  <label for="name">名前：</label>
+  <input type="text" name="name" id="name" />
+  <label for="content">pass：</label>
+  <input type="text" name="pass" id="content"/>
+  
+  <input type="submit" value="送信する">
+</form> 
+
+<% @users.each do |post| %>
+    <div>
+        <p><label for="name">名前： </label><%= post['name'] %>さん</p>
+        <p><%= post['pass'] %></p>
+    </div>
+	
+<% end %>
+
+<% @musics.each do |post| %>
+    <div>
+        <p><label for="name">名前： </label><%= post['name'] %>さん</p>
+        <p><%= post['artist'] %></p><p>:<%= post['url'] %></p>
+    </div>
+	<iframe src="<%= @musics[0]['url'] %>" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<% end %>
+
+
+<% @words.each do |post| %>
+    <div>
+        <p><label for="name">名前： </label><%= post['user_id'] %>さん</p>
+        <p><%= post['music_id'] %></p><p>:<%= post['word'] %></p>
+    </div>
+	
+<% end %>
+
+<% @lyrics.each do |post| %>
+    <div>
+        <p><label for="name">名前： </label><%= post['user_id'] %>さん</p>
+        <p><%= post['music_id'] %></p><p>:<%= post['paragraph'] %></p><p>:<%= post['lyrics'] %></p>
+    </div>
+	
+<% end %>
+
+  
+
+<script type="application/javascript" src="perlin-noise-simplex.js"></script>
+
+
+  <script type="application/javascript">
+
+var canvas, ctx;
+var interval;
+var width, height;
+
+var perlin;
+var xanchor, yanchor, midx, midy, xposnoise, yposnoise;
+var xstart, ystart;
+var squaresize;
+
+function setup() {
+	width = 720;
+	height = 180;
+	canvas = document.getElementById("scrawl");
+	ctx = canvas.getContext("2d");
+	
+	xanchor = 550;
+	yanchor = 50;
+	perlin = new SimplexNoise();
+	xstart = Math.random() * 10.0;
+	ystart = Math.random() * 10.0;
+	xposnoise = Math.random() * 10.0;
+	yposnoise = Math.random() * 10.0;
+	squaresize = 50;
+	
+	interval = setInterval(draw, 30);
+}
+
+function draw() {
+	ctx.fillStyle = "rgba(255, <%= @blue%>, 255, 0.1)";
+	ctx.fillRect (0, 0, width, height);
+		
+	ctx.strokeStyle = "rgba(0, 0, 0, 0.15)";
+	ctx.fillStyle = "rgba(<%= @blue%>, 255, 255, 0.6)";
+	
+	xposnoise += 0.02;
+	yposnoise += 0.01;
+	midx = xanchor + Math.floor(perlin.noise(xposnoise, 0) * 50);
+	midy = yanchor + Math.floor(perlin.noise(yposnoise, 0) * 50);
+	xstart += 0.02;
+	ystart += 0.01;
+	var ynoise = ystart;
+	for (var y = -squaresize; y < squaresize; y++) {
+		ynoise += 0.02;
+		var xnoise = xstart;
+		for (var x = -squaresize; x < squaresize; x++) {
+			xnoise += 0.02;
+			var nFactor = Math.abs(perlin.noise(xnoise, ynoise));
+			drawPoint(x, y, nFactor);
+		}
+	}
+}
+
+function drawPoint(ex, why, noiseFactor) {
+	var x = midx + (ex * noiseFactor * 13);
+	var y = midy + (why * noiseFactor * 9);
+	var edgeSize = noiseFactor * 26;
+	
+	ctx.beginPath();
+	ctx.arc(x, y, edgeSize, 0, Math.PI*2,true); 
+	// x, y, rad, start angle, end angle, anti/clockwise
+	ctx.fill();
+	ctx.stroke();
+}
+
+
+  </script>
+  
+<body onload="setup()">
+   <canvas id="scrawl" width="720" height="180"></canvas>
+
+
+  <%# <script src="js/p5.min.js"></script>
+    <script src="js/sketch.js"></script> %>
+    
+</body>

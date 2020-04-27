@@ -1,0 +1,25 @@
+
+
+<h1>Request musics <%=@users[0]["name"]%></h1>
+
+
+
+<%# post new musics %>
+<form action="/new_music/<%=@users[0]["id"]%>" method="POST">
+ <label for="music_name">music：</label>
+  <input type="text" name="music_name" id="music_name" /><br>
+  <label for="artist">artist：</label>
+  <input type="text" name="artist" id="artist"/><br>
+  <label for="url">Spotyfi url：</label>
+  <input type="text" name="url" id="url"/><br>
+  <label for="word">favorite word：</label>
+  <input type="text" name="word" id="word"/>
+
+  <input type="submit" value="request">
+</form> 
+
+
+<%# post new word %>
+
+
+
